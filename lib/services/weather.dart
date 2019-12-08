@@ -1,4 +1,21 @@
+import 'package:clima/key/Secret.dart';
+import 'package:clima/key/SecretLoader.dart';
+
+import 'location.dart';
+import 'networking.dart';
+
 class WeatherModel {
+  Future getLocationWeather() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+
+    Secret secret = await SecretLoader(secretPath: "secrets.json").load();
+    NetworkHelper helper = NetworkHelper(
+        'https://samples.openweathermap.org/data/2.5/weather?lat=${location.latitude}&lon=${location.longitude}&appid=${secret.apiKey}');
+
+    return await helper.getData();
+  }
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';
