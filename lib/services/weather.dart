@@ -5,6 +5,15 @@ import 'location.dart';
 import 'networking.dart';
 
 class WeatherModel {
+  Future getCityWeather(String cityName) async {
+    Secret secret = await SecretLoader(secretPath: "secrets.json").load();
+
+    var url =
+        'https://samples.openweathermap.org/data/2.5/weather?q=$cityName&appid=${secret.apiKey}';
+    NetworkHelper helper = NetworkHelper(url);
+    return await helper.getData();
+  }
+
   Future getLocationWeather() async {
     Location location = Location();
     await location.getCurrentLocation();
